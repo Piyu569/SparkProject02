@@ -1,0 +1,370 @@
+week_day_number
+
+coalesce-Done
+
+spark.sparkContext.getConf.get("spark.sql.crossJoin.enabled")-Done
+
+persist unpersist chache 
+
+na
+
+drop
+
+summary
+
+describe
+__________________________________________________________________________________________________________________________
+perisit:->
+
+1>The persist() method allows you to store the DataFrame in memory (using MEMORY_ONLY or MEMORY_AND_DISK storage levels) 
+or on disk (using DISK_ONLY, MEMORY_ONLY_SER, MEMORY_AND_DISK_SER, DISK_ONLY_2, or MEMORY_AND_DISK_2 storage levels). 
+The storage level determines where the DataFrame is stored and how it is serialized.
+
+MEMORY_ONLY: This storage level stores the DataFrame in memory as deserialized Java objects. 
+It is the fastest storage level, but also the most memory-intensive.
+
+MEMORY_AND_DISK: This storage level stores the DataFrame in memory as deserialized Java objects, but spills over to disk if
+ the memory usage exceeds the available space.This storage level can be slower than MEMORY_ONLY, 
+ but it is more memory-efficient.
+
+MEMORY_ONLY_SER: This storage level stores the DataFrame in memory as serialized Java objects. It is less memory-intensive 
+than MEMORY_ONLY, but it requires additional CPU overhead for serialization and deserialization.
+
+MEMORY_AND_DISK_SER: This storage level stores the DataFrame in memory as serialized Java objects, 
+but spills over to disk if the memory usage exceeds the available space. It can be slower than MEMORY_ONLY_SER,
+ but it is more memory-efficient.
+
+DISK_ONLY: This storage level stores the DataFrame on disk, and reads it into memory as needed. It is slower than the in-memory 
+storage levels, but it is the most space-efficient.
+
+MEMORY_ONLY_2, MEMORY_AND_DISK_2, MEMORY_ONLY_SER_2, MEMORY_AND_DISK_SER_2, DISK_ONLY_2: These are similar to the corresponding
+storage levels listed above, but with two replicas of the data stored on separate nodes for fault tolerance.
+__________________________________________________________________________________________________________________________
+cache vs perisit:->
+  In PySpark, both cache() and persist() methods are used for caching RDDs in memory. However, persist()
+ provides more flexibility than cache() as it allows you to specify additional options for caching, such 
+ as the storage level and whether to cache eagerly or lazily.
+
+Here are the main differences between cache() and persist() methods in PySpark:
+
+1)cache() is a shorthand for persist(StorageLevel.MEMORY_ONLY). It caches the RDD in memory only with a default
+ storage level.persist() allows you to specify the storage level explicitly, which can be MEMORY_ONLY,
+ MEMORY_AND_DISK, DISK_ONLY, MEMORY_ONLY_SER, MEMORY_AND_DISK_SER, or DISK_ONLY_SER.
+
+2)cache() caches RDD lazily, which means the RDD is only cached the first time it is accessed.
+
+3)persist() can cache RDD either eagerly or lazily. By default, it caches RDD lazily. If you set the eagerly
+ parameter to True, it will cache the RDD immediately.
+
+4)cache() uses the default storage level, which may not be suitable for all use cases. For example, if the RDD
+is too large to fit in memory, cache() will not be able to cache it.
+	 
+5)persist() allows you to specify a suitable storage level based on the size of the RDD and available memory.
+
+6)cache() and persist() both store the RDD in memory, but the storage location and durability can differ. 
+By default, cache() stores the RDD in memory only, while persist() can store the RDD in memory, on disk, 
+or in a combination of both.
+
+7)Both methods can be used to cache an RDD and improve the performance of subsequent operations. However, it is
+important to use caching judiciously, as it can consume a significant amount of memory if too many RDDs are
+cached. In addition, cached RDDs are not automatically cleared from memory, so they should be unpersisted when they are no longer needed.
+
+In summary, persist() provides more flexibility than cache() as it allows you to specify the storage level, 
+cache eagerly or lazily, and store the RDD on disk in addition to memory. cache() is a shorthand for persist
+(StorageLevel.MEMORY_ONLY) and is suitable for simple caching scenarios.
+
+__________________________________________________________________________________________________________________________
+
+
+spark.sql.autoBroadcastJoinThreshold
+
+using NOT AND OR in filter/where
+
+Slots
+
+Query Adaptative Execution
+
+Narrow Transformations
+
+map(), mapPartition(), flatMap(), filter(), union()
+
+Wide Transformations
+
+groupByKey(), reduceByKey(),
+
+
+Using apply functions in Spark Dataframes
+
+UDF (register and use)
+
+val plusOne = udf((x: Int) => x + 1)
+
+spark.udf.register("plusOne", plusOne)
+
+spark.sql("SELECT plusOne(5)").show()
+
+suffle
+
+driver and executors
+
+cache
+
+agg
+
+groupBy
+
+distinct
+
+read and write parquet
+
+split
+
+WithColumn
+
+withColumnRenamed
+
+Union
+
+Logical Plan
+
+physical execution plan
+
+Resource Manager
+
+to_timestamp to epoch date format
+
+agg (sum, mean)
+
+count aprox
+
+dayofweek, dayofmonth, dayofyear
+
+__________________________________________________________________________________________________________________________
+CLUSTER AND ITS TYPES:-
+
+Standalone Cluster: A standalone cluster is a cluster that runs Spark's standalone cluster manager. It is the simplest way to 
+run a Spark application and is suitable for testing and development.
+
+Apache Mesos Cluster: Apache Mesos is a distributed systems kernel that abstracts CPU, memory, storage, and other resources to
+provide efficient resource isolation and sharing across distributed applications. It can be used as a cluster manager for 
+Spark applications.
+
+Hadoop YARN Cluster: Hadoop YARN (Yet Another Resource Negotiator) is a cluster management technology used in Apache Hadoop. 
+It allows multiple data processing engines such as Spark, MapReduce, and Hive to run on the same cluster, sharing cluster 
+resources.
+
+Kubernetes Cluster: Kubernetes is an open-source container orchestration system that automates the deployment, scaling,
+and management of containerized applications. PySpark can be deployed on a Kubernetes cluster to run distributed Spark 
+applications.
+
+
+__________________________________________________________________________________________________________________________
+SPARK/PYSPARK DEPLOY MODES
+VALUE	DESCRIPTION
+
+cluster	In cluster mode, the driver runs on one of the worker nodes, and this node shows as a driver on the Spark Web UI of 
+        your application. cluster mode is used to run production jobs. In "cluster" mode, the framework launches the driver
+		inside of the cluster
+		
+		spark-submit --deploy-mode cluster --driver-memory xxxx  ........
+		
+client	In client mode, the driver runs locally from where you are submitting your application using spark-submit command. 
+        client mode is majorly used for interactive and debugging purposes. Note that in client mode only the driver runs 
+		locally and all tasks run on cluster worker nodes.In "client" mode, the submitter launches the driver outside of the 
+		cluster.
+		
+		spark-submit --deploy-mode client --driver-memory xxxx  ........
+		
+		
+perisit vs unpersist
+
+
+
+perisit is used to store RDDs dataframe in memory  or on the disk
+
+unpersist is used to free up the space in memory or in disk , while default it frees up the  space in memory df.rdd.unpersist()
+df.rdd.unpersist(blocking= True)-> frees up the space in memory
+
+
+Actions and tranformations - > piyu569->sparkpractice2.0.1
+_________________________________________________________________________________________________________________________
+Actions-> count() , collect() , first() , take() , .reduce() , foreach() , .saveAsTextFile()
+
+1)collect() - This method returns all the elements of an RDD to the driver program as an array.
+
+2)count() - This method returns the number of elements in an RDD.
+
+3)first() - This method returns the first element of an RDD.
+
+4)take() - This method returns the first n elements of an RDD.
+
+5)reduce() - This method applies a commutative and associative binary operator to the
+           elements of an RDD and returns the result.
+
+6)aggregate() - This method applies a user-defined function to the elements of an RDD and returns the result.
+
+7)foreach() - This method applies a function to each element of an RDD.
+
+8)saveAsTextFile() - This method writes the elements of an RDD to a text file.
+
+9)saveAsSequenceFile() - This method writes the elements of an RDD to a Hadoop SequenceFile.
+
+10)saveAsPickleFile() - This method writes the elements of an RDD to a binary pickle file.
+
+11)takeOrdered() - This method returns the first n elements of an RDD, sorted in ascending order.
+
+12)top() - This method returns the top n elements of an RDD, sorted in descending order.
+
+13)countByKey() - This method returns a map of each unique key in an RDD to the number of times it appears.
+
+14)foreachPartition() - This method applies a function to each partition of an RDD.
+
+15)glom() - This method returns an RDD where each element is an array of elements from the original RDD partition.
+__________________________________________________________________________________________________________________________
+
+Transformations -> select() , filter() , groupBy() , orderBy() ,
+
+1)map() - This function applies a function to each element of an RDD and returns a new RDD with the results.
+
+2)filter()  -   This function returns an RDD containing only the elements that satisfy a given condition.
+
+3)flatMap() - This function applies a function to each element of an RDD and returns a new RDD containing
+            the concatenated results.
+
+4)groupByKey() - This function groups the elements of an RDD by key and returns an RDD of key-value pairs.
+
+5)reduceByKey() - This function groups the elements of an RDD by key and then applies a reduce function
+                to each group.
+
+6)sortByKey() - This function sorts the elements of an RDD by key.
+
+7)join() - This function joins two RDDs based on a common key.
+
+8)cogroup() - This function groups two RDDs together based on a common key.
+
+9)distinct() - This function returns a new RDD with the distinct elements of an RDD.
+
+10)union() - This function returns a new RDD that contains the union of two RDDs.
+
+11)intersection() - This function returns a new RDD that contains the intersection of two RDDs.
+
+12)subtract() - This function returns a new RDD that contains the elements of one RDD minus the elements 
+             of another RDD.
+
+13)cartesian() - This function returns a new RDD that contains the Cartesian product of two RDDs.
+
+14)zip() - This function returns an RDD containing pairs of corresponding elements from two RDDs.
+
+15)repartition() - This function repartitions an RDD into a specified number of partitions.
+__________________________________________________________________________________________________________________________
+Joins in pyspark
+
+1)Inner Join: An inner join returns only the matching records from both RDDs based on a common key.
+ 
+2)Outer Join: An outer join returns all the records from both RDDs, along with the matching records 
+              based on a common key. If a record doesn't have a match in the other RDD, it will be padded 
+			  with null values.
+
+3)Left Outer Join: A left outer join returns all the records from the left RDD and the matching records from 
+                   the right RDD based on a common key. If a record doesn't have a match in the right RDD, it 
+				   will be padded with null values.
+
+4)Right Outer Join: A right outer join returns all the records from the right RDD and the matching records
+                    from the left RDD based on a common key. If a record doesn't have a match in the left RDD,
+ 					it will be padded with null values.
+
+5)Left Semi-Join: A left semi-join returns only the records from the left RDD that have a match in the right 
+                  RDD based on a common key.
+
+6)Left Anti-Join: A left anti-join returns only the records from the left RDD that do not have a match in the 
+                  right RDD based on a common key.
+
+7)Cross Join: A cross join returns all the possible combinations of records from both RDDs.
+
+# Sample data for demonstration
+rdd1 = sc.parallelize([(1, 'apple'), (2, 'banana'), (3, 'orange')])
+rdd2 = sc.parallelize([(1, 'red'), (2, 'yellow'), (4, 'green')])
+
+# Inner Join
+inner_join = rdd1.join(rdd2, how='inner')
+inner_join.collect()
+# Output: [(1, ('apple', 'red')), (2, ('banana', 'yellow'))]
+
+# Outer Join
+outer_join = rdd1.join(rdd2, how='outer')
+outer_join.collect()
+# Output: [(1, ('apple', 'red')), (4, (None, 'green')), (2, ('banana', 'yellow')), (3, ('orange', None))]
+
+# Left Outer Join
+left_outer_join = rdd1.join(rdd2, how='left_outer')
+left_outer_join.collect()
+# Output: [(1, ('apple', 'red')), (2, ('banana', 'yellow')), (3, ('orange', None))]
+
+# Right Outer Join
+right_outer_join = rdd1.join(rdd2, how='right_outer')
+right_outer_join.collect()
+# Output: [(1, ('apple', 'red')), (2, ('banana', 'yellow')), (4, (None, 'green'))]
+
+# Left Semi-Join
+left_semi_join = rdd1.join(rdd2, how='left_semi')
+left_semi_join.collect()
+# Output: [(1, 'apple'), (2, 'banana')]
+
+# Left Anti-Join
+left_anti_join = rdd1.join(rdd2, how='left_anti')
+left_anti_join.collect()
+# Output: [(3, 'orange')]
+
+# Cross Join
+cross_join = rdd1.crossJoin(rdd2)
+cross_join.collect()
+# Output: [(1, 'apple', 1, 'red'), (1, 'apple', 2, 'yellow'), (1, 'apple', 4, 'green'), (2, 'banana', 1, 'red'), (2, 'banana',
+
+__________________________________________________________________________________________________________________________
+how joins are implemented in pyspark?
+
+In PySpark, joins are implemented using the MapReduce paradigm, which involves two stages: the map stage and
+ the reduce stage.
+
+In the map stage, the data from each RDD is mapped to a key-value pair based on the join key. The key is used 
+to group the data from both RDDs that share a common key. This stage is performed in parallel across the 
+cluster nodes.
+
+In the reduce stage, the data from each group is combined into a single record. The type of join being 
+performed determines how the data is combined. For example, in an inner join, only the matching records 
+are combined, while in an outer join, all the records are combined.
+
+PySpark uses a distributed computing system called Apache Spark to perform joins efficiently. Spark's 
+processing engine provides a number of optimizations to speed up joins, including:
+
+1)Partitioning: Data is partitioned and distributed across the cluster nodes, allowing parallel processing of 
+data.
+
+2)Broadcasting: Small RDDs can be broadcasted to all worker nodes, reducing the amount of data that needs to be 
+transferred over the network.
+Types of Broadcast join.
+There are two types of broadcast joins.
+ 
+   a)Broadcast hash joins: In this case, the driver builds the in-memory hash DataFrame to 
+                           distribute it to the executors.
+						   
+   b)Broadcast nested loop join: It is a nested for-loop join. It is very good for non-equi joins or 
+                                 coalescing joins.
+
+3)Shuffle optimization: The shuffle operation, which is required to combine data across the cluster nodes, is
+optimized to reduce data movement and network traffic.
+
+
+4) Shuffle Hash Partitioning:contains of 2 phases shuffle and hash , condition for hash join is one table should be
+                              small engough to get fit into executor with another tables partition.
+
+
+5)Sort-merge join: For larger datasets, Spark uses a sort-merge join algorithm, which sorts the data before 
+performing the join operation to improve efficiency.
+
+Overall, PySpark provides a powerful and efficient way to perform joins on large datasets using a distributed
+computing system.
+
+
+
+
